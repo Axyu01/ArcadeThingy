@@ -22,7 +22,7 @@ public class Kamikaze : Entity
     {
         Debug.Log("BOOM!!!!!");
         Instantiate(explosionPrefab,transform.position,Quaternion.identity);
-        Destroy(gameObject);
+        Kill();
     }
     
 }

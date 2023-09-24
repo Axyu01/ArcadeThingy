@@ -2,11 +2,13 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
+using UnityEngine.Events;
 
 public class Entity : MonoBehaviour
 {
-    protected const float MAX_HEALTH = 100f;
-    public float Health { get; protected set; } = MAX_HEALTH;
+    
+    public float MAX_HEALTH = 100f;
+    public float Health { get; protected set; }
     //[SerializeField]
     protected NavMeshAgent agent;
     //[SerializeField]
@@ -14,15 +16,24 @@ public class Entity : MonoBehaviour
     // Start is called before the first frame update
     protected virtual void Start()
     {
+        Health = MAX_HEALTH;
+        if(Health <= 0)
+        {
+            Health = 1;
+        }
         if (agent == null)
             if (!TryGetComponent(out agent))
                 Debug.LogWarning($"Couldnt find NavMeshAgent for Entity in {gameObject.name}!");
         if (rb == null)
             if (!TryGetComponent(out rb))
                 Debug.LogError($"Couldnt find Rigidbody for Entity in {gameObject.name}!");
+        GameManager.RegisterEntity(this);
+        gameObject.SetActive(false);
     }
+    [Header("Events")]
+    public UnityEvent OnDeath;
+    public UnityEvent OnDmg;
 
-    // Update is called once per frame
     protected virtual void Update()
     {
 
@@ -50,12 +61,15 @@ public class Entity : MonoBehaviour
     }
     public virtual void GetDmg(float dmg)
     {
-        Debug.Log($"Dmg {dmg}");
         if (dmg < 0)
             return;
-        Health += dmg;
-        if (Health < 0f)
+        Health -= dmg;
+        OnDmg.Invoke();
+        if (Health <= 0f)
+        {
             Health = 0f;
+            OnDeath.Invoke();
+        }
     }
     public virtual void Heal(float heal)
     {
@@ -65,6 +79,12 @@ public class Entity : MonoBehaviour
         Health += heal;
         if(Health > MAX_HEALTH)
             Health = MAX_HEALTH;
+    }
+
+    public void Kill()
+    {
+        GameManager.UnregisterEntity(this);
+        Destroy(gameObject);
     }
 
 }

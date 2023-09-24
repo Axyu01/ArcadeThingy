@@ -2,6 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Runtime.InteropServices.WindowsRuntime;
 using UnityEngine;
+using UnityEngine.Events;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
@@ -20,26 +22,26 @@ public class GameManager : MonoBehaviour
             instance.player = value;
         } 
     }
+    public List<Entity> Entities = new List<Entity>(); 
     Player player = null;
     [Header("Camera")]
     public Camera MainCamera;
     public float CameraDistance = 10f;
     public float CameraAngle = 45f;
     public float CameraLerpSpeed = 5.0f;
-    [Header("UI")]
-    public List<RectTransform> MenuElements = new List<RectTransform>();
-    public List<RectTransform> GameElements = new List<RectTransform>();
     [Header("Game Info UI References")]
     public Text Score;
     int score = 0;
     public Text Wave;
+    [Header("Events")]
+    public UnityEvent OnStart;
+    public UnityEvent OnEnd;
     // Start is called before the first frame update
     void Awake()
     {
-        if(instance == null)
+        if (instance != null)
+            Destroy(instance.gameObject);
             instance = this;
-        else
-            Destroy(this);
         DontDestroyOnLoad(gameObject);
     }
 
@@ -55,12 +57,22 @@ public class GameManager : MonoBehaviour
     }
     public static void StartGame()
     {
+        foreach(Entity entity in instance.Entities)
+        {
+            entity.gameObject.SetActive(true);
+        }
         instance.score = 0;
         instance.Score.text = $"Score:\n{instance.score}";
+        instance.OnStart.Invoke();
     }
-    public void EndGame()
+    public static void EndGame()
     {
-
+        instance.OnEnd.Invoke();
+        foreach (Entity entity in instance.Entities)
+        {
+            entity.gameObject.SetActive(false);
+        }
+        SceneManager.LoadScene(0);
     }
     public static void AddScore(int score)
     {
@@ -75,5 +87,13 @@ public class GameManager : MonoBehaviour
             lerpVal = 1f;
         camera.transform.position = Vector3.Lerp(camera.transform.position,player.transform.position + destRotation*Vector3.back*CameraDistance,lerpVal);
         camera.transform.rotation = Quaternion.Lerp(camera.transform.rotation, destRotation,lerpVal);
+    }
+    public static void RegisterEntity(Entity entity)
+    {
+        instance.Entities.Add(entity);
+    }
+    public static void UnregisterEntity(Entity entity)
+    { 
+        instance.Entities.Remove(entity);
     }
 }

@@ -10,6 +10,7 @@ public class Player : Entity
     {
         base.Start();
         GameManager.Player = this;
+        OnDeath.AddListener(GameManager.EndGame);
     }
 
     Vector2 desiredVelocity = Vector2.zero;
