@@ -69,11 +69,11 @@ public class Entity : MonoBehaviour
         {
             Health = 0f;
             OnDeath.Invoke();
+            Kill();
         }
     }
     public virtual void Heal(float heal)
     {
-        Debug.Log($"Heal {heal}");
         if (heal < 0)
             return;
         Health += heal;

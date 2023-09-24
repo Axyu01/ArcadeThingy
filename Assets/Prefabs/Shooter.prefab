@@ -89,9 +89,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b24f381ce9b653a4e857accd624aa3f0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  MAX_HEALTH: 100
+  OnDeath:
+    m_PersistentCalls:
+      m_Calls: []
+  OnDmg:
+    m_PersistentCalls:
+      m_Calls: []
   _numOfShots: 1
-  _spread: 0
-  _rateOfFire: 2
+  _spread: 4
+  _rateOfFire: 5
   _bulletPrefab: {fileID: 1278735746337121599, guid: 37eb02867ae48d24da2ef49a3d687fb8, type: 3}
   _shootingOffset: {x: 0, y: 1, z: 1.5}
 --- !u!114 &783802713032414659

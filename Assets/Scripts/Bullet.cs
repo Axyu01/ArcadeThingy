@@ -26,7 +26,7 @@ public class Bullet : MonoBehaviour
         yield return new WaitForSeconds(_timeToLive);
         Destroy(gameObject);
     }
-    private void OnCollisionEnter(Collision collision)
+    private void OnCollisionStay(Collision collision)
     {
         Entity entity = collision.collider.gameObject.GetComponentInParent<Entity>();
         if (entity != null)

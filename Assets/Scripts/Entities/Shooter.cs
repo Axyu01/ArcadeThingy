@@ -15,8 +15,8 @@ public class Shooter : Entity
     [SerializeField]
     GameObject _bulletPrefab;
     [SerializeField]
-    Vector3 _shootingOffset = Vector3.forward*1.5f;
-    float shotCooldown;
+    Vector3 _shootingOffset = Vector3.forward*1.5f + Vector3.up;
+    float shotCooldown = 0;
     override protected void Start()
     {
         base.Start();

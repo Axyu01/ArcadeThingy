@@ -20,9 +20,20 @@ public class PlayerBrain : Brain
             controlledEntity.MoveInDirection(new Vector3(velocity.x, 0f, velocity.y));
         else 
             controlledEntity.MoveInDirection(new Vector3(velocity.x, 0f, velocity.y)*0.5f);
+        if (Input.GetKey(KeyCode.Mouse0))
+            controlledEntity.Attack(MousePointedPosition(GameManager.Instance.MainCamera) - transform.position);
     }
     protected override void FixedUpdate()
     {
         //removes default behaviour
+    }
+    public static Vector3 MousePointedPosition(Camera cam)
+    {
+        var ray = cam.ScreenPointToRay(Input.mousePosition);
+        Physics.Raycast(ray, out var hitInfo);
+        if (hitInfo.collider == null)
+            return Vector3.zero;
+        else
+            return hitInfo.point;
     }
 }
