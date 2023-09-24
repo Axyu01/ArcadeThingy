@@ -1200,6 +1200,7 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+  LoadedSceneAfterDeathName: SampleScene
 --- !u!1 &902407422
 GameObject:
   m_ObjectHideFlags: 0

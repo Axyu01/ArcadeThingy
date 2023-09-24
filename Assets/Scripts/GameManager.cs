@@ -36,6 +36,8 @@ public class GameManager : MonoBehaviour
     [Header("Events")]
     public UnityEvent OnStart;
     public UnityEvent OnEnd;
+    [Header("Settings")]
+    public string LoadedSceneAfterDeathName = "";
     // Start is called before the first frame update
     void Awake()
     {
@@ -72,7 +74,7 @@ public class GameManager : MonoBehaviour
         {
             entity.gameObject.SetActive(false);
         }
-        SceneManager.LoadScene(0);
+        SceneManager.LoadScene(instance.LoadedSceneAfterDeathName);
     }
     public static void AddScore(int score)
     {
